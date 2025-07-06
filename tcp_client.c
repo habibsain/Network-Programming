@@ -104,7 +104,29 @@ int main(int argc, char* argv[])
             printf("Received (%d bytes): %.*s", bytes_received, read);
         }
 
-        
+        //Check the readiness of terminal
+        #if defined(_WIN32)
+            if(_kbhit())
+            {
 
+        #else
+            if(FD_ISSET(0, &reads))
+            {
+
+        #endif
+            char read[4096];
+            if(!fgets(&reads, 4096, stdin))
+            {
+                printf(stderr, "fgets() failed. (%d)\n", GETSOCKETERRORNO());
+                break;
+            }
+            
+            printf("Sending: %s", read);
+            int bytes_sent = send(socket_peer, read, 4096, 0);
+            printf("Sent %d bytes.\n", bytes_sent);
+        }
+    
     }
+
+    return 0;
 }
