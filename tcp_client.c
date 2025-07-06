@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
             }
             
             printf("Sending: %s", read);
-            int bytes_sent = send(socket_peer, read, 4096, 0);
+            int bytes_sent = send(socket_peer, read, strlen(read), 0);
             printf("Sent %d bytes.\n", bytes_sent);
             }
     
