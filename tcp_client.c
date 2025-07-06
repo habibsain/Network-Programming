@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
     //Configure remote addr
     printf("Configuring remote address-----\n");
     struct addrinfo hints;
-    memsett(&hints, 0, sizeof(hints));
+    memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
 
     struct addrinfo* peer_address;
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
 
         #endif
             char read[4096];
-            if(!fgets(&reads, 4096, stdin))
+            if(!fgets(read, 4096, stdin))
             {
                 printf(stderr, "fgets() failed. (%d)\n", GETSOCKETERRORNO());
                 break;
@@ -124,9 +124,17 @@ int main(int argc, char* argv[])
             printf("Sending: %s", read);
             int bytes_sent = send(socket_peer, read, 4096, 0);
             printf("Sent %d bytes.\n", bytes_sent);
-        }
+            }
     
     }
+    printf("Closing socket----\n");
+    CLOSESOCKET(socket_peer);
 
+    #if defined(_WIN32)
+        WSACleanup();
+    #endif
+
+    printf("Finished.\n");
     return 0;
+    
 }
