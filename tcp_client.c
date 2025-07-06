@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
                 break;
             }
 
-            printf("Received (%d bytes): %.*s", bytes_received, read);
+            printf("Received (%d bytes): %.*s", bytes_received, bytes_received, read);
         }
 
         //Check the readiness of terminal
