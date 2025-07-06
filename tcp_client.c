@@ -56,4 +56,55 @@ int main(int argc, char* argv[])
     }
 
     //Establish connection with remote server
+    printf("Connecting----\n");
+    if (connect(socket_peer, peer_address->ai_addr, peer_address->ai_addrlen))
+    {
+        fprintf(stderr, "connect() failed. (%d)\n", GETSOCKETERRORNO());
+        return 1;
+    }
+    freeaddrinfo(peer_address);
+    
+    printf("Connected.\n");
+    printf("To send data,  enter text followed by enter.\n");
+
+    //Check terminal and socket for new data
+
+    while(1)
+    {
+        fd_set reads;
+        FD_ZERO(&reads);
+        FD_SET(socket_peer, &reads);
+
+    #if !defined(_WIN32)
+        //set stdin as reading file descriptor
+        FD_SET(0, &reads);
+    #endif
+
+        timeval timeout;
+        timeout.tv_sec = 0;
+        timeout.tv_microsec = 100000;
+
+        if (select(socket_peer + 1, &reads, 0, 0, &timeout) < 0)
+        {
+            fprintf( stderr, "select() failed. (%d)\n", GETSOCKETERRORNO());
+            return 1;
+        }
+
+        //Check the readiness of tcp socket
+        if (FD_ISSET(socket_peer, &reads))
+        {
+            char read[4096];
+            int bytes_received = recv(socket_peer, read, 4096, 0);
+            if (bytes_received < 1)
+            {
+                printf(stderr, "recv() failed. (%d)\n", GETSOCKETERRORNO());
+                break;
+            }
+
+            printf("Received (%d bytes): %.*s", bytes_received, read);
+        }
+
+        
+
+    }
 }
