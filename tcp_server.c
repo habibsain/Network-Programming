@@ -20,6 +20,8 @@ int main()
     struct addrinfo *host_addr;
     getaddrinfo(0, "8080", &hints, &host_addr);
 
+    //bind
+
 
     SOCKET host_socket;
 
