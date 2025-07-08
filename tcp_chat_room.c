@@ -126,14 +126,19 @@ int main()
                         continue;
                     }
 
-                    //Capitilising the received message from socket
-                    for(int j = 0; j < bytes_received; j++)
-                    {
-                        read[j] = toupper(read[j]);
-                    }
+                    //Sending data rcvd from one client to to all  other client
+                    SOCKET j;
 
-                    //sending the Capitalised data
-                    send(i, read, bytes_received, 0);
+                    for(j = 0; j <= max_socket; j++)
+                    {
+                        if (FD_ISSET(j, &master))
+                        {
+                            if ( j == host_socket || j == i)
+                                continue;
+                            else
+                                send(j, read, bytes_received, 0);
+                        }
+                    }
 
                 }//endif i == host_socket 
             }//endif FD_ISSET 
