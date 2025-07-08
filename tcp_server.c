@@ -48,6 +48,43 @@ int main()
         return 1;
     }
 
+    fd_set master;
+    FD_ZERO(&master);
+    FD_SET(host_socket, &master);
+    SOCKET max_socket = host_socket;
+
+    printf("Waiting for connections---\n");
+
+    while(1)
+    {
+        //Create a copy of the socket collection for reading data
+        fd_set reads;
+        reads = master;
+
+        timeval timeout;
+        timeout.tv_sec = 0;
+        timeout.tv_microsec = 10000;
+
+        if (select(max_socket + 1, &reads, 0, 0, &timeout) < 0)
+        {
+            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRORNO());
+            return 1;
+        }
+
+        //check readiness of sockets
+        SOCKET i;
+        for(i = 1; i <= max_socket; i++)
+        {
+            if (FD_ISSET(i, &reads))
+            {
+                if (i == host_socket)
+                {
+                    
+                }
+            }
+        }
+    }
+
     
 
 
