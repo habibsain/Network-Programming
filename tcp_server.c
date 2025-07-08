@@ -1,6 +1,7 @@
 //tcp_server.c
 
 #include "include/socket_header.h"
+#include<ctype.h>
 
 int main()
 {
@@ -101,11 +102,41 @@ int main()
                     printf("New connection from %s\n", address_buffer);
 
                 }
-                
-            }
-        }
-    }
+                else
+                {
+                    //read input from socket
+                    char read[1024];
+                    int bytes_received = recv(i, read, 1024, 0);
+                    
+                    //If the client socket is disconnected
+                    if (bytes_received < 1)
+                    {
+                        FD_CLR(i, &master);
+                        CLOSESOCKET(i);
+                        continue;
+                    }
 
+                    //Capitilising the received message from socket
+                    for(int j = 0; j < bytes_received; j++)
+                    {
+                        read[j] = toupper(read[j]);
+                    }
 
+                    //sending the Capitalised data
+                    send(i, read, bytes_received, 0);
+
+                }//endif i == host_socket 
+            }//endif FD_ISSET 
+        }//endfor (loop in socket set)
+    }//end while (listen and recv)
+
+    printf("Closing listening socket....\n");
+    CLOSESOCKET(host_socket);
+
+    #if defined(_WIN32)
+        WSACleanup();
+    #endif
+
+    printf("Finished.\n");
     return 0;
 }
