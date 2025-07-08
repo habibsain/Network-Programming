@@ -6,17 +6,21 @@
 int main()
 {
     #if defined(_WIN32)
-    WSDATA d;
+    WSADATA d;
     if(WSAStartup(MAKEWORD(2, 2), &d))
     {
         fprintf(stderr, "Failed to initialize socket");
-        returrn -1;
+        return 1;
     }
     #endif
 
+
+    //Configure host addr
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
+    hints.ai_family = AF_INET6;
+    hints.ai_flags = AI_PASSIVE;
     
     struct addrinfo *host_addr;
     getaddrinfo(0, "8080", &hints, &host_addr);
@@ -29,6 +33,15 @@ int main()
         fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRORNO());
         return 1;
     }
+
+    //Make it support dual-stack sockets
+    int  option = 0;
+    if(setsockopt(host_socket, IPPROTO_IPV6, IPV6_V6ONLY, (void*)&option, sizeof(option)))
+    {
+        fprintf(stderr, "setsockopt() failed. (%d)\n", GETSOCKETERRORNO());
+        return  1;
+    }
+
 
 
     //binding host(listening) socket to host(local) address
