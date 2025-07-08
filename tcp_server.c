@@ -65,7 +65,7 @@ int main()
         timeout.tv_sec = 0;
         timeout.tv_microsec = 10000;
 
-        if (select(max_socket + 1, &reads, 0, 0, &timeout) < 0)
+        if (select(max_socket + 1, &reads, 0, 0, 0) < 0)
         {
             fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRORNO());
             return 1;
@@ -79,13 +79,32 @@ int main()
             {
                 if (i == host_socket)
                 {
+                    struct  sockaddr_storage client_addr;
+                    socklen_t  client_len = sizeof(client_addr);
+                    SOCKET client_socket = accept(host_socket, (struct sockaddr*) &client_addr, &client_len);
+                    if (!ISVALIDSOCKET(client_socket))
+                    {
+                        fprintf(stderr, "accept() failed. (%d)\n", GETSOCKETERRORNO());
+                        return 1;
+                    }
                     
+                    //Add the client socket to collection of sockets
+                    FD_SET(client_socket, &master);
+                    if (client_socket > max_socket)
+                    {
+                        max_socket = client_socket;
+                    }
+
+                    //print the client addr info
+                    char address_buffer[100];
+                    getnameinfo((struct sockaddr*) &client_addr, client_len, address_buffer, sizeof(address_buffer), 0, 0, NI_NUMERICHOST);
+                    printf("New connection from %s\n", address_buffer);
+
                 }
+                
             }
         }
     }
-
-    
 
 
     return 0;
