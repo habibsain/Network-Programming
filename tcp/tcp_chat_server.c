@@ -1,7 +1,7 @@
 //tcp_server.c
 
-#include "include/socket_header.h"
-#include<ctype.h>
+#include "../include/socket_header.h"
+#include <ctype.h>
 
 int main()
 {

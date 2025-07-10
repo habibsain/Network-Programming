@@ -1,6 +1,6 @@
 //TCP client
 
-#include  "include/socket_header.h"
+#include  "../include/socket_header.h"
 
 int main(int argc, char* argv[])
 {
