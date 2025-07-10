@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     //Check for  CL input
     if (argc < 3)
     {
-        fprintf(stderr, "Usage: tcp_client hostname port\n");
+        fprintf(stderr, "Usage: udp_client hostname port\n");
         return 1;
     }
 
