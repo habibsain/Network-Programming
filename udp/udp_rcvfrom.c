@@ -40,5 +40,14 @@ int main()
         return  1;
     }
 
+    printf("Binding-----\n");
+    if (bind(socket_listen, bind_addr->ai_addr, bind_addr->ai_addrlen))
+    {
+        fprintf(stderr, "bind() failed. (%d)\n", GETSOCKETERRORNO());
+        return 1;
+    }
+    freeaddrinfo(bind_addr);
+
+
 
 }
