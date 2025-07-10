@@ -52,6 +52,7 @@ int main()
         fprintf(stderr, "bind() failed. (%d)\n", GETSOCKETERRORNO());
         return 1;
     }
+    freeaddrinfo(host_addr);
 
     //Listen on the socket in host server
     printf("Listening-----\n");
