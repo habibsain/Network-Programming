@@ -56,15 +56,13 @@ int main(int argc, char* argv[])
     }
 
     //Save the remote server using connect(No connection is established)
-    printf("Connecting----\n");
     if (connect(socket_peer, peer_address->ai_addr, peer_address->ai_addrlen))
     {
         fprintf(stderr, "connect() failed. (%d)\n", GETSOCKETERRORNO());
         return 1;
     }
     freeaddrinfo(peer_address);
-    
-    printf("Connected.\n");
+
     printf("To send data,  enter text followed by enter.\n");
 
     //Check terminal and socket for new data
