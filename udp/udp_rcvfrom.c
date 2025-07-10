@@ -1,4 +1,4 @@
-//udp server(recv)
+//udp server(single recv)
 
 #include "../include/socket_header.h"
 
