@@ -48,6 +48,30 @@ int main()
     }
     freeaddrinfo(bind_addr);
 
+    //receive incoming data
+    struct sockaddr_storage client_addr;
+    socklen_t client_len = sizeof(client_addr);
+    char read[1024];
+    int bytes_received = recvfrom(socket_listen, read, 1024, 0, (struct sockaddr*)&client_addr, &client_len);
+    
+    printf("Received (%d bytes): %.*s\n", bytes_received, bytes_received, read);
 
+    printf("Remote address is: ");
+    char address_buffer[100];
+    char service_buffer[100];
+
+    getnameinfo((struct sockaddr*)&client_addr, client_len, address_buffer, sizeof(address_buffer), service_buffer, sizeof(service_buffer), NI_NUMERICHOST | NI_NUMERICSERV);
+
+    printf("%s %s\n", address_buffer, service_buffer);
+
+    CLOSESOCKET(socket_listen);
+
+    #if defined(_WIN32)
+        WSACleanup();
+    #endif
+
+    printf("Finished.\n");
+
+    return 0;
 
 }
