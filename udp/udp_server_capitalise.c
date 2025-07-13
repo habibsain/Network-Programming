@@ -55,7 +55,7 @@ int main()
     SOCKET max_socket = socket_listen;
 
     
-    //receive msg
+    printf("Waiting for connection----\n");
 
     while(1)
     {
