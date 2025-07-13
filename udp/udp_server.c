@@ -48,4 +48,37 @@ int main()
     }
     freeaddrinfo(bind_addr);
 
+    fd_set master;
+    FD_ZERO(&master);
+    FD_SET(socket_listen, &master);
+    SOCKET max_socket = socket_listen;
+
+    
+    //receive msg
+
+    while(1)
+    {
+        fd_set readfds = master;
+        if (select(max_socket + 1, &readfds, 0, 0, 0) < 0)
+        {
+            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRORNO());
+            return 1;   
+        }
+
+        for (int i = 0; i <= max_socket; i++)
+        {
+            if (FD_ISSET(socket_listen, &readfds))
+            {
+                struct sockaddr_storage client_address;
+                socklen_t client_len = sizeof(client_address);
+
+                char read[1024];
+                int bytes_received = recvfrom(socket_listen, read, 1024, 0, (struct sockaddr*) &client_address, &client_len);
+                
+            }
+        }
+    }
+
+    return 0;
+
 }
