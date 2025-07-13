@@ -1,6 +1,7 @@
 //UDP server
 
 #include "../include/socket_header.h"
+#include <ctype.h>
 
 int main()
 {
@@ -65,19 +66,38 @@ int main()
             return 1;   
         }
 
-        for (int i = 0; i <= max_socket; i++)
+        if (FD_ISSET(socket_listen, &readfds))
         {
-            if (FD_ISSET(socket_listen, &readfds))
-            {
-                struct sockaddr_storage client_address;
-                socklen_t client_len = sizeof(client_address);
+            struct sockaddr_storage client_address;
+            socklen_t client_len = sizeof(client_address);
 
-                char read[1024];
-                int bytes_received = recvfrom(socket_listen, read, 1024, 0, (struct sockaddr*) &client_address, &client_len);
-                
+            char read[1024];
+            int bytes_received = recvfrom(socket_listen, read, 1024, 0, (struct sockaddr*) &client_address, &client_len);
+            if (bytes_received < 1)
+            {
+                fprintf(stderr, "recvfrom() failed. (%d)\n", GETSOCKETERRORNO());
+                return 1;
             }
+
+            //printf("Received (%d bytes): %.*s", bytes_received, bytes_received, read);
+            int j;
+            for (j = 0; j < bytes_received; j++)
+            {
+                read[j] = toupper(read[j]);
+            }
+
+            sendto(socket_listen, read, 1024, 0, (struct sockaddr*) &client_address, &client_len);
         }
+        
     }
+    printf("Closing Listening socket----\n");
+    CLOSESOCKET(socket_listen);
+
+    #if defined(_WIN32)
+        WSACleanup();
+    #endif
+    
+    printf("Finished");
 
     return 0;
 
