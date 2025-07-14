@@ -80,7 +80,7 @@ int main()
                 return 1;
             }
 
-            //printf("Received (%d bytes): %.*s", bytes_received, bytes_received, read);
+            printf("Received (%d bytes): %.*s", bytes_received, bytes_received, read);
             
             for (int j = 0; j < bytes_received; j++)
             {
