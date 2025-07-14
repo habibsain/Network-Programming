@@ -44,11 +44,11 @@
 #define IPV6_V6ONLY 27
 #endif
 
-typedef struct timeval  
+struct timeval  
 {
     long tv_sec;
     long tv_microsec;
-} timevalue;
+};
 
 SOCKET create_socket(struct addrinfo* address_ptr)
 {
