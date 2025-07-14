@@ -48,7 +48,7 @@ typedef struct timeval
 {
     long tv_sec;
     long tv_microsec;
-} timeval;
+} timevalue;
 
 SOCKET create_socket(struct addrinfo* address_ptr)
 {
