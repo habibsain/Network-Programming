@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 
     if (!ISVALIDSOCKET(socket_peer))
     {
-        printf(stderr, "socket() failed. (%d)\n", GETSOCKETERRORNO());
+        fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRORNO());
         return 1;
     }
 
@@ -80,9 +80,9 @@ int main(int argc, char* argv[])
         FD_SET(0, &reads);
     #endif
 
-        timeval timeout;
+        struct timeval timeout;
         timeout.tv_sec = 0;
-        timeout.tv_microsec = 100000;
+        timeout.tv_usec = 100000;
 
         if (select(socket_peer + 1, &reads, 0, 0, &timeout) < 0)
         {
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
             int bytes_received = recv(socket_peer, read, 4096, 0);
             if (bytes_received < 1)
             {
-                printf(stderr, "recv() failed. (%d)\n", GETSOCKETERRORNO());
+                fprintf(stderr, "recv() failed. (%d)\n", GETSOCKETERRORNO());
                 break;
             }
 
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
             char read[4096];
             if(!fgets(read, 4096, stdin))
             {
-                printf(stderr, "fgets() failed. (%d)\n", GETSOCKETERRORNO());
+                fprintf(stderr, "fgets() failed. (%d)\n", GETSOCKETERRORNO());
                 break;
             }
             
