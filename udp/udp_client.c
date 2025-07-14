@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 
     if (!ISVALIDSOCKET(socket_peer))
     {
-        printf(stderr, "socket() failed. (%d)\n", GETSOCKETERRORNO());
+        fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRORNO());
         return 1;
     }
 
