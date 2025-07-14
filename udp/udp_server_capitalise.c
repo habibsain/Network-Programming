@@ -87,7 +87,7 @@ int main()
                 read[j] = toupper(read[j]);
             }
 
-            sendto(socket_listen, read, bytes_received, 0, (struct sockaddr*) &client_address, &client_len);
+            sendto(socket_listen, read, bytes_received, 0, (struct sockaddr*) &client_address, client_len);
         }
         
     }
