@@ -59,7 +59,8 @@ int main()
 
     while(1)
     {
-        fd_set readfds = master;
+        fd_set readfds; 
+        readfds = master;
         if (select(max_socket + 1, &readfds, 0, 0, 0) < 0)
         {
             fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRORNO());
@@ -80,13 +81,13 @@ int main()
             }
 
             //printf("Received (%d bytes): %.*s", bytes_received, bytes_received, read);
-            int j;
-            for (j = 0; j < bytes_received; j++)
+            
+            for (int j = 0; j < bytes_received; j++)
             {
                 read[j] = toupper(read[j]);
             }
 
-            sendto(socket_listen, read, 1024, 0, (struct sockaddr*) &client_address, &client_len);
+            sendto(socket_listen, read, bytes_received, 0, (struct sockaddr*) &client_address, &client_len);
         }
         
     }
