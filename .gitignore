@@ -1,3 +1,4 @@
 *.x
-.vscode/
+*.vscode/
 *.json
+*.o
