@@ -15,14 +15,16 @@ void test_parser()
     char* port;
     char* path;
     
-    char url_1[]  = "http//:example.com";
+    char url_1[]  = "http://www.example.com";
     parse_url(url_1, &hostname, &port, &path);
-    assert(strcmp( hostname, "example.com") == 0 && "parse_url()" );
+    //printf("hostname: %s\n", hostname);
+    assert(strcmp( hostname, "www.example.com") == 0 && "parse_url()" );
 
-
-    char url_1[]  = "http//:80/example.com/";
-    parse_url(url_1, &hostname, &port, &path);
-    assert(strcmp( hostname, "example.com") == 0 && strcmp( port, "80") == 0 && "parse_url()" );
+    char url_2[]  = "http://www.example.com:80";
+    parse_url(url_2, &hostname, &port, &path);
+    // printf("hostname: %s\n", hostname);
+    // printf("port: %s\n", port);
+    assert(strcmp( hostname, "www.example.com") == 0 && strcmp( port, "80") == 0 && "parse_url()" );
     
 }
 

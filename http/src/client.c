@@ -4,11 +4,11 @@
 
 void parse_url(char* url, char** hostname, char** port, char** path)
 {
-    printf("url: %s", url);
+    printf("url: %s\n", url);
 
     //check if the url has correct protocol
     char* ptr;
-    ptr = strstr(url, "//:");
+    ptr = strstr(url, "://");
 
     char* protocol = 0;
 
@@ -54,12 +54,16 @@ void parse_url(char* url, char** hostname, char** port, char** path)
     //check for document path
     *path = ptr;
 
-    while (*ptr && *ptr != '/' && *ptr != '#' && *ptr != '?' )
+    if (*ptr == '/')
+    {
+        *path = ptr + 1;//We can skip the first "/"
+    }
+
+    while (*ptr && *ptr != '#' )
         ptr++;
-    *ptr = 0;
-    ptr++;    
-
-
-
+    
+    if (*ptr == '#')
+        *ptr = 0;
+   
 
 }
