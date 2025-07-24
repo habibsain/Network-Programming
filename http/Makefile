@@ -2,9 +2,12 @@ CC = gcc
 srcdir = ./include
 CFLAGS = -g -I. -I$(srcdir)
 
-target = out
+target = main
 
-SRCS = ./src/client.c client_test.c
+SRCS = ./src/client.c http_get.c
+#For testing uncomment below
+#SRCS = ./src/client.c client_test.c
+
 OBJS = $(SRCS:.c=.o)
 
 .PHONY: all
