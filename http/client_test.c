@@ -17,15 +17,23 @@ void test_parser()
     
     char url_1[]  = "http://www.example.com";
     parse_url(url_1, &hostname, &port, &path);
-    //printf("hostname: %s\n", hostname);
-    assert(strcmp( hostname, "www.example.com") == 0 && "parse_url()" );
+    // printf("%s\n", hostname);
+    // printf("%s\n", port);
+    assert(strcmp( hostname, "www.example.com") == 0 && strcmp( port, "80") == 0 && "parse_url()" );
 
-    char url_2[]  = "http://www.example.com:80";
+    char url_2[]  = "http://www.example.com:40";
     parse_url(url_2, &hostname, &port, &path);
     // printf("hostname: %s\n", hostname);
     // printf("port: %s\n", port);
-    assert(strcmp( hostname, "www.example.com") == 0 && strcmp( port, "80") == 0 && "parse_url()" );
+    assert(strcmp( hostname, "www.example.com") == 0 && strcmp( port, "40") == 0 && "parse_url()" );
     
+    char url_3[]  = "http://www.example.com:35/mysite/todo.html";
+    parse_url(url_3, &hostname, &port, &path);
+    // printf("hostname: %s\n", hostname);
+    // printf("port: %s\n", port);
+    // printf("path: %s\n", path);
+    assert(strcmp( hostname, "www.example.com") == 0 && strcmp( port, "35") == 0 && strcmp( path, "mysite/todo.html") == 0 && "parse_url()" );
+
 }
 
 int main()

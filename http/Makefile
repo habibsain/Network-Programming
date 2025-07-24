@@ -2,9 +2,9 @@ CC = gcc
 srcdir = ./include
 CFLAGS = -g -I. -I$(srcdir)
 
-target = main
+target = out
 
-SRCS = ./src/client.c main.c
+SRCS = ./src/client.c client_test.c
 OBJS = $(SRCS:.c=.o)
 
 .PHONY: all

@@ -52,10 +52,12 @@ void parse_url(char* url, char** hostname, char** port, char** path)
         ptr++;
 
     //check for document path
-    *path = ptr;
+    if(*ptr)
+        *path = ptr;
 
     if (*ptr == '/')
     {
+        *ptr = 0;
         *path = ptr + 1;//We can skip the first "/"
     }
 
