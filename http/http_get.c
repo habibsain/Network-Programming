@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
                 if (q)
                 {
                     encoding = length;
-                    q = strstr(q, ' ');
+                    q = strchr(q, ' ');
                     q++;
                     remaining = strtol(q, 0, 10);
                 }
