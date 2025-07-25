@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 
     char response[RESPONSE_SIZE + 1];
     //p ponter keeps track of how much of response is filled
-    char *p = response, *q;
+    char *p = response;
     //end pointer ponts to end of response
     char* end = response + RESPONSE_SIZE;
     char* body = 0;
@@ -108,6 +108,8 @@ int main(int argc, char* argv[])
 
             //Note:
             //Null terminated string enables us to use strstr()
+
+            char* q;//Used to point to beginning of searched string 
             
             //Look for blank line after header to determine start oof body
             if (!body && (body = strstr(response, "\r\n\r\n")))
@@ -116,10 +118,88 @@ int main(int argc, char* argv[])
                 *body  = 0;
                 body += 4;
                 printf("Received Header:\n%s\n", response);
+
+                q = strstr(response, "\nContent-Length: ");
+
+                if (q)
+                {
+                    encoding = length;
+                    q = strstr(q, ' ');
+                    q++;
+                    remaining = strtol(q, 0, 10);
+                }
+                else
+                {
+                    q = strstr(response, "\nTransfer-Encoding: chunked");
+                    if (q)
+                    {
+                        encoding = chunked;
+                        remaining = 0;
+                    }
+                    else{
+                        encoding = connection;
+                    }
+                }
+                printf("\nReceived body:\n");
+
+            }
+
+            if (body)
+            {
+                if (encoding == length)
+                {
+                    if (p - body >= remaining)//wait until receiving the remaining bytes
+                    {
+                        printf("%.*s", remaining, body);
+                        break;
+                    }
+                }
+                else if (encoding == chunked)
+                {
+                    //Want to loop over all the chunks and reassign remaining to zero after printing a chunk
+                    do
+                    {
+                        if (remaining == 0)
+                        {
+                            if ((q = strstr(body, "\r\n")))
+                            {
+                                remaining = strtol(body, 0, 16);//chunk length is given in hexadecimal format
+                                if (!remaining)//Since the chunked message ends with zero-length chunk we use goto
+                                {
+                                    goto finish;//break both loop by jumping to finish label
+                                }
+                                body = q + 2;//body points to the remaining length chunk, since there is '\r\n' (newline) after the hexadecimal number
+                            }
+                            else
+                            {
+                                break;
+                            }
+                                
+                        }
+                        if (remaining && p - body >= remaining)//Again wait for remaining chunk before printing
+                        {
+                            printf("%.*s", remaining, body);
+                            body += remaining + 2;//Now body points to the next hexadecimal
+                            remaining = 0;
+
+                        }
+                    }
+                    while(!remaining);
+                }
             }
         }
                                                  
     }
+    finish://target for goto
+
+    printf("\nClosing socket-----\n");
+    CLOSESOCKET(server);
+
+    #if defined(_WIN32)
+        WSACleanup()
+    #endif
+
+    printf("Finished.\n");
 
     return 0;
 }
