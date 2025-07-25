@@ -2,4 +2,7 @@
 * Simple TCP client and TCP server to capitalise any input
 * Simple UDP client and connectionless UDP capitalising server
 * TCP chat server
-* HTTP client
+
+* Simple HTTP client with GET request 
+* URL and response parser
+* Unit tested parts of the application
